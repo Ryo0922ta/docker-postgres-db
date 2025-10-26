@@ -1,0 +1,44 @@
+
+#データを保存するための永続定義 
+volumes: 
+  postgres_data:
+    name: postgres_data 
+    driver: 'local'
+  pgadmin_data:
+    driver: 'local'
+
+services:
+
+  postgres: #PostgresSqlのコンテナ設定
+    build:
+      context: ./postgres #dockerファイルがある相対パス
+      dockerfile: Dockerfile  #利用するdockerファイルの名前
+    container_name: "postgres_db"
+    platform: linux/arm64
+    environment:
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: P@ssw0rd
+      POSTGRES_DB: devDB
+      TZ: "Asia/Tokyo"
+    ports:
+      - "15432:5432" # ホスト→コンテナのポート転送（左: Mac側、右: コンテナ側）
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      # - ./postgres/sql:/docker-entrypoint-initdb.d # 初期化SQLを自動実行するフォルダ 現段階で不必要なのでコメントアウト
+
+  pgadmin:
+    image: dpage/pgadmin4:8.6
+    container_name: "pgadmin4"
+    platform: linux/arm64
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com  # ログイン用メールアドレス
+      PGADMIN_DEFAULT_PASSWORD: admin           # ログイン用パスワード
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
+      TZ: "Asia/Tokyo"                         # タイムゾーン設定
+    ports:
+      - "18080:80"
+    volumes:
+    - pgadmin_data:/var/lib/pgadmin            #設定データの永続化
+    depends_on:
+      - postgres                               # PostgreSQLコンテナが起動してから立ち上げるよう指定
