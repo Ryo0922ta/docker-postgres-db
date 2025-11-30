@@ -1,4 +1,5 @@
-FROM postgres:15-alpine
+FROM postgres@sha256:aa7b1ef595e165f0b780162e3a41edd0a7ed3ea672eb8a0f81615ba725e62bc5
+
 
 RUN apk add --no-cache --update \
     tzdata \
