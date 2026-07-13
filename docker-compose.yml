@@ -3,7 +3,7 @@ services:
         build:
             context: ./postgres #dockerファイルがある相対パス
             dockerfile: Dockerfile #利用するdockerファイルの名前
-        container_name: "postgres_db"
+        container_name: "postgres_db_learning" #コンテナ名
         platform: linux/arm64
         environment:
             POSTGRES_USER: ${POSTGRES_USER}
@@ -33,7 +33,7 @@ services:
 
     pgadmin:
         image: dpage/pgadmin4:8.6
-        container_name: "pgadmin4"
+        container_name: "pgadmin4_learning" #コンテナ名
         environment:
             PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL} # ログイン用メールアドレス
             PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD} # ログイン用パスワード
@@ -59,9 +59,10 @@ services:
 #データを保存するための永続定義
 volumes:
     postgres_data:
-        name: postgres_data
+        name: postgres_data_learning #ボリューム名を指定することで、docker-compose downしてもデータが消えないようにする
         driver: "local"
     pgadmin_data:
+        name: pgadmin_data_learning #ボリューム名を指定することで、docker-compose downしてもデータが消えないようにする
         driver: "local"
 
 # =========================================
