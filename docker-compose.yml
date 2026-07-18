@@ -1,3 +1,4 @@
+name: "docker-compose-postgres-learning"
 services:
     postgres: #PostgresSqlのコンテナ設定
         build:
@@ -23,7 +24,7 @@ services:
             - postgres_data:/var/lib/postgresql/data
             # - ./postgres/sql:/docker-entrypoint-initdb.d # 初期化SQLを自動実行するフォルダ 現段階で不必要なのでコメントアウト
         networks:
-            - db_network
+            - db_network_learning
         deploy:
             # 【改善】DB暴走時にホストPCがフリーズしないようリソース上限を設定
             resources:
@@ -48,7 +49,7 @@ services:
             postgres:
                 condition: service_healthy #PostgreSQLコンテナが起動してから立ち上げるよう指定
         networks:
-            - db_network
+            - db_network_learning
         deploy:
             # 【改善】pgAdminも無尽蔵にリソースを食わないよう制限
             resources:
@@ -69,5 +70,5 @@ volumes:
 # ネットワーク定義 (コンテナ間の隔離)
 # =========================================
 networks:
-    db_network:
+    db_network_learning:
         driver: bridge
